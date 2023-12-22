@@ -1,4 +1,4 @@
-package com.example.jetpackcomposeinstagram
+package com.example.jetpackcomposeinstagram.login
 
 
 import android.app.Activity
@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,16 +46,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.jetpackcomposeinstagram.R
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(loginViewModel: LoginViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Header(Modifier.align(Alignment.TopEnd))
-        Body(Modifier.align(Alignment.Center))
+        Body(Modifier.align(Alignment.Center), loginViewModel)
         Footer(Modifier.align(Alignment.BottomCenter))
 
     }
@@ -107,15 +109,17 @@ fun Header(modifier: Modifier) {
 
 
 @Composable
-fun Body(modifier: Modifier) {
-    var email by rememberSaveable { mutableStateOf("") }
+fun Body(modifier: Modifier, loginViewModel: LoginViewModel) {
+    val email: String by loginViewModel.email.observeAsState(initial = "")
     var password by rememberSaveable { mutableStateOf("") }
     var isLoginEnable by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         ImageLogo()
         Spacer(modifier = Modifier.size(16.dp))
-        Email(email) { email = it }
+        Email(email) {
+            loginViewModel.onLoginChanged(it)
+        }
         Spacer(modifier = Modifier.size(12.dp))
         Password(password) { password = it }
         Spacer(modifier = Modifier.size(8.dp))
@@ -215,8 +219,7 @@ fun ForgotPassword(modifier: Modifier) {
 fun Password(password: String, onTextChanged: (String) -> Unit) {
     var passwordVisibility by remember { mutableStateOf(false) }
 
-    TextField(
-        value = password,
+    TextField(value = password,
         onValueChange = { onTextChanged(it) },
         modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(text = "Password") },
@@ -254,8 +257,7 @@ fun Password(password: String, onTextChanged: (String) -> Unit) {
 
 @Composable
 fun Email(email: String, onTextChanged: (String) -> Unit) {
-    TextField(
-        value = email,
+    TextField(value = email,
         onValueChange = { onTextChanged(it) },
         modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(text = "Email") },
