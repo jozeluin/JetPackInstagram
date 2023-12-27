@@ -4,8 +4,11 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.jetpackcomposeinstagram.login.domain.LoginUseCase
 
 class LoginViewModel : ViewModel() {
+
+    val loginUsecase=LoginUseCase()
 
 
     private val _email = MutableLiveData<String>()
@@ -19,6 +22,7 @@ class LoginViewModel : ViewModel() {
         _email.value = email
         _password.value = password
         _isLogingEnable.value = enableLogin(email, password)
+        loginUsecase("","")
     }
 
     fun enableLogin(email: String, password: String) =
