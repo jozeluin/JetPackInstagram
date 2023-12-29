@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -46,17 +47,38 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpackcomposeinstagram.R
+import retrofit2.http.Body
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel) {
+    val modifier=Modifier
     Box(
-        Modifier
+        modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Header(Modifier.align(Alignment.TopEnd))
-        Body(Modifier.align(Alignment.Center), loginViewModel)
-        Footer(Modifier.align(Alignment.BottomCenter))
+        val isLoading:Boolean by loginViewModel.isLoading.observeAsState(initial = false)
+
+        if(isLoading){
+            Box(
+                modifier
+                   // .fillMaxSize()
+                    .align(Alignment.Center)){
+                CircularProgressIndicator()
+
+            }
+
+
+        }
+
+        else{
+
+            Header(Modifier.align(Alignment.TopEnd))
+            Body(Modifier.align(Alignment.TopCenter), loginViewModel)//era Center
+            Footer(Modifier.align(Alignment.BottomCenter))
+        }
+
+
 
     }
 
@@ -125,7 +147,7 @@ fun Body(modifier: Modifier, loginViewModel: LoginViewModel) {
         Spacer(modifier = Modifier.size(8.dp))
         ForgotPassword(Modifier.align(Alignment.End))
         Spacer(modifier = Modifier.size(16.dp))
-        LoginButton(isLoginEnable)
+        LoginButton(isLoginEnable,loginViewModel)
         Spacer(modifier = Modifier.size(16.dp))
         LoginDivider()
         Spacer(modifier = Modifier.size(32.dp))
@@ -186,9 +208,9 @@ fun LoginDivider() {
 }
 
 @Composable
-fun LoginButton(loginEnable: Boolean) {
+fun LoginButton(loginEnable: Boolean,loginViewModel: LoginViewModel) {
     Button(
-        onClick = { },
+        onClick = {loginViewModel.onLoginSelected() },
         enabled = loginEnable,
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
