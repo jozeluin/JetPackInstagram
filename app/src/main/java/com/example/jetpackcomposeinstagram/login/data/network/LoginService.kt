@@ -4,7 +4,7 @@ import com.example.jetpackcomposeinstagram.core.network.RetrofitHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class LoginService {
+class LoginService  {
     private val retrofit = RetrofitHelper.getRefrofit()
 
     suspend fun doLogin(user: String, password: String): Boolean {
