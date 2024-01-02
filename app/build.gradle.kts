@@ -52,7 +52,6 @@ android {
     }
 
 
-
 }
 
 dependencies {
@@ -80,7 +79,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
-   kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
 
 }
